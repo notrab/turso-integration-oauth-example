@@ -27,6 +27,8 @@ export async function GET(request: Request) {
 
     const data = await response.json();
 
+    cookieStore.delete("code_verifier");
+
     return NextResponse.redirect(
       `${origin}/?access_token=${data.access_token}`,
     );

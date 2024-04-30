@@ -5,10 +5,27 @@ import { cookies } from "next/headers";
 const CLIENT_ID = process.env.TURSO_CLIENT_ID!;
 const REDIRECT_URI = process.env.TURSO_REDIRECT_URI!;
 
+async function CurrentUser({ access_token }: { access_token: string }) {
+  if (!access_token) return null;
+
+  const response = await fetch("https://api.turso.tech/v1/organizations", {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  }
+
+  return null;
+}
+
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: { [key: string]: string | undefined };
 }) {
   const { access_token } = searchParams;
 
@@ -26,7 +43,7 @@ export default async function Home({
   }
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <div className="min-h-screen p-12 flex items-center justify-center">
       {access_token ? (
         <div className="max-w-3xl space-y-3">
           <h1 className="text-4xl font-bold">You did it! 🎉</h1>
@@ -36,6 +53,7 @@ export default async function Home({
             access_token:
           </p>
           <pre>{access_token}</pre>
+          <CurrentUser access_token={access_token} />
         </div>
       ) : (
         <form action={handleSubmit}>

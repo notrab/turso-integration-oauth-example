@@ -37,7 +37,7 @@ export default async function Home({
 
     cookies().set("code_verifier", code_verifier, { secure: true });
 
-    const url = `https://turso.tech/integrations/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&code_challenge_method=S256&code_challenge=${CODE_CHALLENGE}`;
+    const url = `https://app.turso.tech/integrations/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&code_challenge_method=S256&code_challenge=${CODE_CHALLENGE}`;
 
     redirect(url);
   }
